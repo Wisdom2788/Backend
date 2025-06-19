@@ -1,18 +1,17 @@
 const Transaction = require('../models/transactionModel');
 
-   class TransactionRepository {
-       async getAll() {
-           return await Transaction.find().sort({ createdAt: -1 });
-       }
+class TransactionRepository {
+    static async findAll(userId) {
+        return await Transaction.find({ userId }).sort({ createdAt: -1 });
+    }
 
-       async create(transactionData) {
-           const transaction = new Transaction(transactionData);
-           return await transaction.save();
-       }
+    static async create(data) {
+        return await Transaction.create(data);
+    }
 
-       async delete(id) {
-           return await Transaction.findByIdAndDelete(id);
-       }
-   }
+    static async deleteById(id, userId) {
+        return await Transaction.findOneAndDelete({ _id: id, userId });
+    }
+}
 
-   module.exports = new TransactionRepository();
+module.exports = TransactionRepository;

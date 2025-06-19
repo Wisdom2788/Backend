@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const transactionController = require('./controllers/transactionController');
+const authController = require('./controllers/authController');
 
 dotenv.config();
 
@@ -12,6 +13,13 @@ app.use(cors({ origin: 'http://127.0.0.1:5500' }));
 app.use(express.json());
 
 app.use('/api/transactions', transactionController);
+app.use('/api/auth', authController);
+
+app.use((error, req, res, next) => {
+    const status = error.statusCode || 500;
+    console.error('Global error:', error.message, error.stack);
+    res.status(status).json({ error: error.message });
+});
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))

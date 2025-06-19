@@ -1,12 +1,13 @@
+const { mapToDto } = require('../utils/mapper');
 const TransactionDto = require('../dtos/transactionDto');
 
 class TransactionResponse {
     static formatSingle(transaction) {
-        return new TransactionDto(transaction);
+        return mapToDto(transaction, TransactionDto);
     }
 
     static formatMultiple(transactions) {
-        return transactions.map(transaction => new TransactionDto(transaction));
+        return transactions.map(transaction => mapToDto(transaction, TransactionDto));
     }
 }
 
